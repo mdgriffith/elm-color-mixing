@@ -2,7 +2,7 @@ module Color.Mixing (..) where
 
 {-|
 
-@docs Factor, darken, desaturate, fade, fadeIn, fadeOut, lighten, mix, saturate, spin, tint, shade, greyscale
+@docs Factor, darken, desaturate, fade, fadeIn, fadeOut, lighten, mix, saturate, spin, tint, shade
 
 @docs blend
 
@@ -142,12 +142,6 @@ mix p color1 color2 =
         alpha = rgba1.alpha * p + rgba2.alpha * (1 - p)
     in
         rgba (round r) (round g) (round b) alpha
-
-
-{-| -}
-greyscale : Color -> Color
-greyscale color =
-    desaturate 1.0 color
 
 
 {-| -}

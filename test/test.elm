@@ -62,9 +62,6 @@ tests =
         , test "Mix"
             <| assert
             <| colorEquality (mix 0.5 (rgba 100 0 0 1.0) (rgba 0 100 0 0.5)) (rgba 75 25 0 0.75)
-        , test "Greyscale"
-            <| assert
-            <| colorEquality (toGreyscale <| hsl (degrees 90) 0.9 0.5) (hsl (degrees 90) 0 0.5)
         ]
 
 
