@@ -220,10 +220,10 @@ overlay color1 color2 =
                 newc1 = c1 * 2
             in
                 if newc1 <= 1 then
-                    c1 * c2
+                    newc1 * c2
                 else
                     let
-                        c1' = c1 - 1
+                        c1' = newc1 - 1
                     in
                         c1' + c2 - c1' * c2
         )
