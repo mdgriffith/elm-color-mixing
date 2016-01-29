@@ -102,11 +102,13 @@ spin x color =
     let
         colorHSL = toHsl color
 
-        protoHue = toFloat <| round (colorHSL.hue + x) % 360
+        precision = 1000000.0
+
+        protoHue = (toFloat <| round ((colorHSL.hue + x) * precision) % round ((degrees 360.0) * precision)) / precision
 
         hue =
             if protoHue < 0 then
-                protoHue + 360
+                protoHue + (degrees 360.0)
             else
                 protoHue
     in
