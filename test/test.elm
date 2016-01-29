@@ -14,9 +14,32 @@ startColor =
 
 colorEquality c1 c2 =
     let
+        rgba1 = toRgb c1
+
+        rgba2 = toRgb c2
+
+        alphaTolerance a =
+            round (a * 1000)
+    in
+        rgba1.red
+            == rgba2.red
+            && rgba1.green
+            == rgba2.green
+            && rgba1.blue
+            == rgba2.blue
+            && alphaTolerance rgba1.alpha
+            == alphaTolerance rgba2.alpha
+
+
+colorEqualityDebug c1 c2 =
+    let
         rgba1 = Debug.log "color1" <| toRgb c1
 
         rgba2 = Debug.log "color2" <| toRgb c2
+
+        hsl1 = Debug.log "color1" <| toHsl c1
+
+        hsl2 = Debug.log "color2" <| toHsl c2
 
         alphaTolerance a =
             round (a * 1000)
@@ -90,6 +113,26 @@ tests =
             <| colorEquality
                 (shade 0.5 (rgba 0 0 255 0.5))
                 (rgba 0 0 64 0.75)
+        , test "Multiply"
+            <| assert
+            <| colorEquality
+                (multiply (rgb 255 102 0) (rgb 0 0 0))
+                (rgb 0 0 0)
+        , test "Softlight"
+            <| assert
+            <| colorEquality
+                (softlight (rgb 255 102 0) (rgb 0 0 0))
+                (rgb 255 41 0)
+        , test "Overlay"
+            <| assert
+            <| colorEquality
+                (overlay (rgb 255 102 0) (rgb 0 0 0))
+                (rgb 255 0 0)
+        , test "Overlay 2"
+            <| assert
+            <| colorEquality
+                (overlay (rgb 255 102 0) (rgb 51 51 51))
+                (rgb 255 41 0)
         ]
 
 
