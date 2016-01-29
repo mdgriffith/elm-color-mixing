@@ -45,7 +45,8 @@ desaturate x color =
         hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
 
 
-{-| -}
+{-| Increase the lightness of a color.
+-}
 lighten : Factor -> Color -> Color
 lighten x color =
     let
@@ -56,7 +57,8 @@ lighten x color =
         hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
 
 
-{-| -}
+{-| Decrease the lightness of a color.
+-}
 darken : Factor -> Color -> Color
 darken x color =
     let
@@ -67,7 +69,8 @@ darken x color =
         hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
 
 
-{-| -}
+{-| Decrease the transparency of a color, making it more opaque.
+-}
 fadeIn : Factor -> Color -> Color
 fadeIn x color =
     let
@@ -78,7 +81,8 @@ fadeIn x color =
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
 
-{-| -}
+{-| Increase the transparency of a color, making it less opaque.
+-}
 fadeOut : Factor -> Color -> Color
 fadeOut x color =
     let
@@ -89,7 +93,8 @@ fadeOut x color =
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
 
-{-| -}
+{-| Set the absolute transparency of a color.
+-}
 fade : Factor -> Color -> Color
 fade x color =
     let
@@ -100,7 +105,9 @@ fade x color =
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
 
-{-| -}
+{-| Rotate the hue angle of a color in either direction.
+
+-}
 spin : Factor -> Color -> Color
 spin x color =
     let
@@ -119,7 +126,8 @@ spin x color =
         hsla hue (colorHSL.saturation) (colorHSL.lightness) (colorHSL.alpha)
 
 
-{-| -}
+{-| Mix two colors together in variable proportion. Opacity is included in the calculations.
+-}
 mix : Factor -> Color -> Color -> Color
 mix p color1 color2 =
     let
@@ -150,13 +158,15 @@ mix p color1 color2 =
         rgba (round r) (round g) (round b) alpha
 
 
-{-| -}
+{-| Mix color with white in variable proportion. Same as calling `mix` with white.
+-}
 tint : Factor -> Color -> Color
 tint x color =
     mix x (rgb 255 255 255) color
 
 
-{-| -}
+{-| Mix color with black in variable proportion.  Same as calling `mix` with black.
+-}
 shade : Factor -> Color -> Color
 shade x color =
     mix x (rgb 0 0 0) color
@@ -203,19 +213,25 @@ blend fn color1 color2 =
             newAlpha
 
 
-{-| -}
+{-| Multiply two colors. Corresponding RGB channels from each of the two colors are multiplied together then divided by 255. The result is a darker color.
+-}
 multiply : Color -> Color -> Color
 multiply color1 color2 =
     blend (*) color1 color2
 
 
-{-| -}
+{-| Do the opposite of `multiply`. The result is a brighter color.
+-}
 screen : Color -> Color -> Color
 screen color1 color2 =
     blend (\c1 c2 -> c1 + c2 - c1 * c2) color1 color2
 
 
-{-| -}
+{-| Combines the effects of both multiply and screen. Conditionally make light channels lighter and dark channels darker.
+
+__Note:__ The results of the conditions are determined by the first color parameter.
+
+-}
 overlay : Color -> Color -> Color
 overlay color1 color2 =
     blend
@@ -235,7 +251,9 @@ overlay color1 color2 =
         color2
 
 
-{-| -}
+{-| Similar to overlay but avoids pure black resulting in pure black, and pure white resulting in pure white.
+
+-}
 softlight : Color -> Color -> Color
 softlight color1 color2 =
     blend
@@ -260,31 +278,37 @@ softlight color1 color2 =
         color2
 
 
-{-| -}
+{-| The same as overlay but with the color roles reversed.
+
+-}
 hardlight : Color -> Color -> Color
 hardlight color1 color2 =
     overlay color2 color1
 
 
-{-| -}
+{-| Subtracts the second color from the first color on a channel-by-channel basis. Negative values are inverted. Subtracting black results in no change; subtracting white results in color inversion.
+-}
 difference : Color -> Color -> Color
 difference color1 color2 =
     blend (\c1 c2 -> abs (c1 - c2)) color1 color2
 
 
-{-| -}
+{-| A similar effect to difference with lower contrast.
+-}
 exclusion : Color -> Color -> Color
 exclusion color1 color2 =
     blend (\c1 c2 -> c1 + c2 - 2 * c1 * c2) color1 color2
 
 
-{-| -}
+{-| Compute the average of two colors on a per-channel (RGB) basis.
+-}
 average : Color -> Color -> Color
 average color1 color2 =
     blend (\c1 c2 -> (c1 + c2) / 2) color1 color2
 
 
-{-| -}
+{-| Do the opposite effect to difference.
+-}
 negation : Color -> Color -> Color
 negation color1 color2 =
     blend (\c1 c2 -> 1 - abs (c1 + c2 - 1)) color1 color2
