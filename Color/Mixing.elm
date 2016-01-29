@@ -2,9 +2,11 @@ module Color.Mixing (..) where
 
 {-|
 
-@docs Factor, darken, desaturate, fade, fadeIn, fadeOut, lighten, mix, saturate, spin
+@docs Factor, darken, desaturate, fade, fadeIn, fadeOut, lighten, mix, saturate, spin, tint, shade, greyscale
 
-@docs tint, shade, greyscale
+@docs blend
+
+@docs average, difference, exclusion, hardlight, multiply, negation, overlay, screen, softlight
 
 
 -}
@@ -160,13 +162,129 @@ shade x color =
     mix x (rgb 0 0 0) color
 
 
+{-| -}
+blend : (Float -> Float -> Float) -> Color -> Color -> Color
+blend fn color1 color2 =
+    let
+        rgba1 = toRgb color1
 
---multiply
---screen
---overlay
---softlight
---hardlight
---difference
---exclusion
---average
---negation
+        rgba2 = toRgb color2
+
+        newAlpha = rgba2.alpha + rgba1.alpha * (1 - rgba2.alpha)
+
+        apply channel1 channel2 =
+            let
+                c1 = toFloat channel1 / 255
+
+                c2 = toFloat channel2 / 255
+
+                c' = fn c1 c2
+
+                newChannel =
+                    if newAlpha /= 0.0 then
+                        (rgba2.alpha
+                            * c2
+                            + rgba1.alpha
+                            * (c1
+                                - rgba2.alpha
+                                * (c1 + c2 - c')
+                              )
+                        )
+                            / newAlpha
+                    else
+                        c'
+            in
+                round <| newChannel * 255
+    in
+        rgba
+            (apply rgba1.red rgba2.red)
+            (apply rgba1.green rgba2.green)
+            (apply rgba1.blue rgba2.blue)
+            newAlpha
+
+
+{-| -}
+multiply : Color -> Color -> Color
+multiply color1 color2 =
+    blend (*) color1 color2
+
+
+{-| -}
+screen : Color -> Color -> Color
+screen color1 color2 =
+    blend (\c1 c2 -> c1 + c2 - c1 * c2) color1 color2
+
+
+{-| -}
+overlay : Color -> Color -> Color
+overlay color1 color2 =
+    blend
+        (\c1 c2 ->
+            let
+                newc1 = c1 * 2
+            in
+                if newc1 <= 1 then
+                    c1 * c2
+                else
+                    let
+                        c1' = c1 - 1
+                    in
+                        c1' + c2 - c1' * c2
+        )
+        color1
+        color2
+
+
+{-| -}
+softlight : Color -> Color -> Color
+softlight color1 color2 =
+    blend
+        (\c1 c2 ->
+            let
+                ( e, d ) =
+                    if (c2 > 0.5) then
+                        let
+                            d =
+                                if c1 > 0.25 then
+                                    sqrt c1
+                                else
+                                    ((16 * c1 - 12) * c1 + 4) * c1
+                        in
+                            ( d, 1 )
+                    else
+                        ( c1, 1 )
+            in
+                c1 - (1 - 2 * c2) * e * (d - c1)
+        )
+        color1
+        color2
+
+
+{-| -}
+hardlight : Color -> Color -> Color
+hardlight color1 color2 =
+    overlay color2 color1
+
+
+{-| -}
+difference : Color -> Color -> Color
+difference color1 color2 =
+    blend (\c1 c2 -> abs (c1 - c2)) color1 color2
+
+
+{-| -}
+exclusion : Color -> Color -> Color
+exclusion color1 color2 =
+    blend (\c1 c2 -> c1 + c2 - 2 * c1 * c2) color1 color2
+
+
+{-| -}
+average : Color -> Color -> Color
+average color1 color2 =
+    blend (\c1 c2 -> (c1 + c2) / 2) color1 color2
+
+
+{-| -}
+negation : Color -> Color -> Color
+negation color1 color2 =
+    blend (\c1 c2 -> 1 - abs (c1 + c2 - 1)) color1 color2
