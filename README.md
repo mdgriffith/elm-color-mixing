@@ -1,12 +1,8 @@
 # Elm Color Mixing
 
-At the moment this package is just a stub.  
+Functions to mix color.
 
-My plan is to cover all color functions that are documented in the LessCss CSS preprocessor:
+Use the [Elm Core Color type](http://package.elm-lang.org/packages/elm-lang/core/2.1.0/Color) to create your colors and this library to mix them.
 
-[http://lesscss.org/functions/#color-operations](http://lesscss.org/functions/#color-operations)
-
-And to use the [Core Color type](http://package.elm-lang.org/packages/elm-lang/core/2.1.0/Color) provided by Elm.
-
-
+This library is modeled off of the [LESSCSS color functions](http://lesscss.org/functions/#color-operations). See their documentation for general descriptions of each color operation.
 

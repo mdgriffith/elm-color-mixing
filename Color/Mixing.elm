@@ -1,8 +1,8 @@
-module Color.Mixing (..) where
+module Color.Mixing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight) where
 
 {-|
 
-@docs Factor, darken, desaturate, fade, fadeIn, fadeOut, lighten, mix, saturate, spin, tint, shade
+@docs Factor, lighten, darken, saturate, desaturate, fade, fadeIn, fadeOut,  mix, spin, tint, shade
 
 @docs blend
 
@@ -14,12 +14,16 @@ module Color.Mixing (..) where
 import Color exposing (..)
 
 
-{-| -}
+{-| A Float that should be between 0.0 and 1.0
+
+-}
 type alias Factor =
     Float
 
 
-{-| -}
+{-| Increase the saturation of a color in the HSL color space by an absolute amount.
+
+-}
 saturate : Factor -> Color -> Color
 saturate x color =
     let
@@ -30,7 +34,9 @@ saturate x color =
         hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
 
 
-{-| -}
+{-| Decrease the saturation of a color in the HSL color space by an absolute amount.
+
+-}
 desaturate : Factor -> Color -> Color
 desaturate x color =
     let
