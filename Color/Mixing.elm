@@ -4,8 +4,6 @@ module Color.Mixing (Factor, lighten, darken, saturate, desaturate, tint, shade,
 
 @docs Factor, lighten, darken, saturate, desaturate, fade, fadeIn, fadeOut,  mix, spin, tint, shade
 
-@docs blend
-
 @docs average, difference, exclusion, hardlight, multiply, negation, overlay, screen, softlight
 
 
