@@ -1,6 +1,5 @@
 {
-    "name": "elm-color-mixing",
-    "version": "2.0.0",
+    "version": "1.0.3",
     "summary": "Color Mixing Functions!",
     "repository": "https://github.com/mdgriffith/elm-color-mixing.git",
     "license": "BSD3",
@@ -12,6 +11,6 @@
     ],
     "dependencies": {
         "elm-lang/core": "4.0.0 <= v < 5.0.0"
-    }, 
+    },
     "elm-version": "0.17.0 <= v < 0.18.0"
 }
