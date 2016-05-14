@@ -1,7 +1,6 @@
-module Main (..) where
+module Main exposing (..) 
 
 import String
-import Graphics.Element exposing (Element)
 import ElmTest exposing (..)
 import Debug
 import Color.Mixing exposing (..)
@@ -136,6 +135,6 @@ tests =
         ]
 
 
-main : Element
+--main : Element
 main =
-    elementRunner tests
+    runSuiteHtml tests

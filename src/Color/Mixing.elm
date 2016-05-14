@@ -1,4 +1,4 @@
-module Color.Mixing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight) where
+module Color.Mixing exposing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight) 
 
 {-|
 
