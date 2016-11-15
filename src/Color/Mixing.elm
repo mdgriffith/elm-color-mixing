@@ -1,4 +1,4 @@
-module Color.Mixing exposing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight) 
+module Color.Mixing exposing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight)
 
 {-|
 
@@ -25,9 +25,11 @@ type alias Factor =
 saturate : Factor -> Color -> Color
 saturate x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        sat = clamp 0 1 (colorHSL.saturation + x)
+        sat =
+            clamp 0 1 (colorHSL.saturation + x)
     in
         hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
 
@@ -38,9 +40,11 @@ saturate x color =
 desaturate : Factor -> Color -> Color
 desaturate x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        sat = clamp 0 1 (colorHSL.saturation - x)
+        sat =
+            clamp 0 1 (colorHSL.saturation - x)
     in
         hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
 
@@ -50,9 +54,11 @@ desaturate x color =
 lighten : Factor -> Color -> Color
 lighten x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        lightness = clamp 0 1 (colorHSL.lightness + x)
+        lightness =
+            clamp 0 1 (colorHSL.lightness + x)
     in
         hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
 
@@ -62,9 +68,11 @@ lighten x color =
 darken : Factor -> Color -> Color
 darken x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        lightness = clamp 0 1 (colorHSL.lightness - x)
+        lightness =
+            clamp 0 1 (colorHSL.lightness - x)
     in
         hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
 
@@ -74,9 +82,11 @@ darken x color =
 fadeIn : Factor -> Color -> Color
 fadeIn x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        alpha = clamp 0 1 (colorHSL.alpha + x)
+        alpha =
+            clamp 0 1 (colorHSL.alpha + x)
     in
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
@@ -86,9 +96,11 @@ fadeIn x color =
 fadeOut : Factor -> Color -> Color
 fadeOut x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        alpha = clamp 0 1 (colorHSL.alpha - x)
+        alpha =
+            clamp 0 1 (colorHSL.alpha - x)
     in
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
@@ -98,9 +110,11 @@ fadeOut x color =
 fade : Factor -> Color -> Color
 fade x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        alpha = clamp 0 1 x
+        alpha =
+            clamp 0 1 x
     in
         hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
 
@@ -111,11 +125,14 @@ fade x color =
 spin : Factor -> Color -> Color
 spin x color =
     let
-        colorHSL = toHsl color
+        colorHSL =
+            toHsl color
 
-        precision = 1000000.0
+        precision =
+            1000000.0
 
-        protoHue = (toFloat <| round ((colorHSL.hue + x) * precision) % round ((degrees 360.0) * precision)) / precision
+        protoHue =
+            (toFloat <| round ((colorHSL.hue + x) * precision) % round ((degrees 360.0) * precision)) / precision
 
         hue =
             if protoHue < 0 then
@@ -131,13 +148,17 @@ spin x color =
 mix : Factor -> Color -> Color -> Color
 mix p color1 color2 =
     let
-        rgba1 = toRgb color1
+        rgba1 =
+            toRgb color1
 
-        rgba2 = toRgb color2
+        rgba2 =
+            toRgb color2
 
-        w = p * 2 - 1
+        w =
+            p * 2 - 1
 
-        a = rgba1.alpha - rgba2.alpha
+        a =
+            rgba1.alpha - rgba2.alpha
 
         w1 =
             if w * a == -1 then
@@ -145,15 +166,20 @@ mix p color1 color2 =
             else
                 (((w + a) / (1 + w * a)) + 1) / 2.0
 
-        w2 = 1 - w1
+        w2 =
+            1 - w1
 
-        r = toFloat rgba1.red * w1 + toFloat rgba2.red * w2
+        r =
+            toFloat rgba1.red * w1 + toFloat rgba2.red * w2
 
-        g = toFloat rgba1.green * w1 + toFloat rgba2.green * w2
+        g =
+            toFloat rgba1.green * w1 + toFloat rgba2.green * w2
 
-        b = toFloat rgba1.blue * w1 + toFloat rgba2.blue * w2
+        b =
+            toFloat rgba1.blue * w1 + toFloat rgba2.blue * w2
 
-        alpha = rgba1.alpha * p + rgba2.alpha * (1 - p)
+        alpha =
+            rgba1.alpha * p + rgba2.alpha * (1 - p)
     in
         rgba (round r) (round g) (round b) alpha
 
@@ -176,19 +202,25 @@ shade x color =
 blend : (Float -> Float -> Float) -> Color -> Color -> Color
 blend fn color1 color2 =
     let
-        rgba1 = toRgb color1
+        rgba1 =
+            toRgb color1
 
-        rgba2 = toRgb color2
+        rgba2 =
+            toRgb color2
 
-        newAlpha = rgba2.alpha + rgba1.alpha * (1 - rgba2.alpha)
+        newAlpha =
+            rgba2.alpha + rgba1.alpha * (1 - rgba2.alpha)
 
         apply channel1 channel2 =
             let
-                c1 = toFloat channel1 / 255
+                c1 =
+                    toFloat channel1 / 255
 
-                c2 = toFloat channel2 / 255
+                c2 =
+                    toFloat channel2 / 255
 
-                c' = fn c1 c2
+                c_ =
+                    fn c1 c2
 
                 newChannel =
                     if newAlpha /= 0.0 then
@@ -197,12 +229,12 @@ blend fn color1 color2 =
                             + rgba1.alpha
                             * (c1
                                 - rgba2.alpha
-                                * (c1 + c2 - c')
+                                * (c1 + c2 - c_)
                               )
                         )
                             / newAlpha
                     else
-                        c'
+                        c_
             in
                 round <| newChannel * 255
     in
@@ -237,15 +269,17 @@ overlay color1 color2 =
     blend
         (\c1 c2 ->
             let
-                newc1 = c1 * 2
+                newc1 =
+                    c1 * 2
             in
                 if newc1 <= 1 then
                     newc1 * c2
                 else
                     let
-                        c1' = newc1 - 1
+                        c1_ =
+                            newc1 - 1
                     in
-                        c1' + c2 - c1' * c2
+                        c1_ + c2 - c1_ * c2
         )
         color1
         color2
