@@ -56,11 +56,19 @@ So
 
         -- Add %50 to the red channel
         Color.blue
-            |>mapRedPercent ((+) 0.5)
+            |> Color.Mixing.mapRedPercent ((+) 0.5)
 
 @docs mapRedPercent, mapGreenPercent, mapBluePercent, mapAlphaPercent
 
-@docs mapSaturation, mapHue, mapLightness, mapSaturationPercent, mapHuePercent, mapLightnessPercent
+
+## Map HSL Channels
+
+@docs mapSaturation, mapHue, mapLightness
+
+
+## Map HSL Channels as Percent
+
+@docs mapSaturationPercent, mapHuePercent, mapLightnessPercent
 
 -}
 
