@@ -1,11 +1,66 @@
-module Color.Mixing exposing (Factor, lighten, darken, saturate, desaturate, tint, shade, fade, fadeIn, fadeOut, mix, spin, average, difference, multiply, exclusion, negation, overlay, screen, softlight, hardlight)
+module Color.Mixing
+    exposing
+        ( Factor
+        , lighten
+        , darken
+        , saturate
+        , desaturate
+        , tint
+        , shade
+        , fade
+        , fadeIn
+        , fadeOut
+        , mix
+        , spin
+        , average
+        , difference
+        , multiply
+        , exclusion
+        , negation
+        , overlay
+        , screen
+        , softlight
+        , hardlight
+        , mapRed
+        , mapGreen
+        , mapBlue
+        , mapAlpha
+        , mapRedPercent
+        , mapGreenPercent
+        , mapBluePercent
+        , mapAlphaPercent
+        , mapSaturation
+        , mapHue
+        , mapLightness
+        , mapSaturationPercent
+        , mapHuePercent
+        , mapLightnessPercent
+        )
 
-{-|
+{-| Color Mixing!
 
-@docs Factor, lighten, darken, saturate, desaturate, fade, fadeIn, fadeOut,  mix, spin, tint, shade
+@docs Factor, lighten, darken, saturate, desaturate, fade, fadeIn, fadeOut, mix, spin, tint, shade
 
 @docs average, difference, exclusion, hardlight, multiply, negation, overlay, screen, softlight
 
+
+## Mapping a Function Over a Channel
+
+Give a function that takes the current channel value and returns a new channel value.
+
+@docs mapRed, mapGreen, mapBlue, mapAlpha
+
+The `..Percent` version of the maps will take the current channel value as a *percentage* and return a new percentage that the channel should be.
+
+So
+
+        -- Add %50 to the red channel
+        Color.blue
+            |>mapRedPercent ((+) 0.5)
+
+@docs mapRedPercent, mapGreenPercent, mapBluePercent, mapAlphaPercent
+
+@docs mapSaturation, mapHue, mapLightness, mapSaturationPercent, mapHuePercent, mapLightnessPercent
 
 -}
 
@@ -13,14 +68,156 @@ import Color exposing (..)
 
 
 {-| A Float that should be between 0.0 and 1.0
-
 -}
 type alias Factor =
     Float
 
 
-{-| Increase the saturation of a color in the HSL color space by an absolute amount.
+{-| -}
+mapRed : (Int -> Int) -> Color -> Color
+mapRed fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba (fn red) green blue alpha
 
+
+{-| -}
+mapGreen : (Int -> Int) -> Color -> Color
+mapGreen fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red (fn green) blue alpha
+
+
+{-| -}
+mapBlue : (Int -> Int) -> Color -> Color
+mapBlue fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red green (fn blue) alpha
+
+
+{-| -}
+mapAlpha : (Float -> Float) -> Color -> Color
+mapAlpha fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red green blue (fn alpha)
+
+
+{-| -}
+mapSaturation : (Float -> Float) -> Color -> Color
+mapSaturation fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla hue (fn saturation) lightness alpha
+
+
+{-| -}
+mapHue : (Float -> Float) -> Color -> Color
+mapHue fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla (fn hue) saturation lightness alpha
+
+
+{-| -}
+mapLightness : (Float -> Float) -> Color -> Color
+mapLightness fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla hue saturation (fn lightness) alpha
+
+
+percent fn channel factor =
+    factor * (fn (channel / factor))
+
+
+{-| -}
+mapRedPercent : (Float -> Float) -> Color -> Color
+mapRedPercent fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba (round (percent fn (toFloat red) 255)) green blue alpha
+
+
+{-| -}
+mapGreenPercent : (Float -> Float) -> Color -> Color
+mapGreenPercent fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red (round <| percent fn (toFloat green) 255) blue alpha
+
+
+{-| -}
+mapBluePercent : (Float -> Float) -> Color -> Color
+mapBluePercent fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red green (round <| percent fn (toFloat blue) 255) alpha
+
+
+{-| -}
+mapAlphaPercent : (Float -> Float) -> Color -> Color
+mapAlphaPercent fn color =
+    let
+        { red, green, blue, alpha } =
+            Color.toRgb color
+    in
+        Color.rgba red green blue (percent fn alpha 1.0)
+
+
+{-| -}
+mapSaturationPercent : (Float -> Float) -> Color -> Color
+mapSaturationPercent fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla hue (percent fn saturation 1.0) lightness alpha
+
+
+{-| -}
+mapHuePercent : (Float -> Float) -> Color -> Color
+mapHuePercent fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla (percent fn hue (degrees 360)) saturation lightness alpha
+
+
+{-| -}
+mapLightnessPercent : (Float -> Float) -> Color -> Color
+mapLightnessPercent fn color =
+    let
+        { hue, saturation, lightness, alpha } =
+            Color.toHsl color
+    in
+        Color.hsla hue saturation (percent fn lightness 1.0) alpha
+
+
+{-| Increase the saturation of a color in the HSL color space by an absolute amount.
 -}
 saturate : Factor -> Color -> Color
 saturate x color =
@@ -35,7 +232,6 @@ saturate x color =
 
 
 {-| Decrease the saturation of a color in the HSL color space by an absolute amount.
-
 -}
 desaturate : Factor -> Color -> Color
 desaturate x color =
@@ -120,7 +316,6 @@ fade x color =
 
 
 {-| Rotate the hue angle of a color in either direction.
-
 -}
 spin : Factor -> Color -> Color
 spin x color =
@@ -191,7 +386,7 @@ tint x color =
     mix x (rgb 255 255 255) color
 
 
-{-| Mix color with black in variable proportion.  Same as calling `mix` with black.
+{-| Mix color with black in variable proportion. Same as calling `mix` with black.
 -}
 shade : Factor -> Color -> Color
 shade x color =
@@ -261,7 +456,7 @@ screen color1 color2 =
 
 {-| Combines the effects of both multiply and screen. Conditionally make light channels lighter and dark channels darker.
 
-__Note:__ The results of the conditions are determined by the first color parameter.
+**Note:** The results of the conditions are determined by the first color parameter.
 
 -}
 overlay : Color -> Color -> Color
@@ -286,7 +481,6 @@ overlay color1 color2 =
 
 
 {-| Similar to overlay but avoids pure black resulting in pure black, and pure white resulting in pure white.
-
 -}
 softlight : Color -> Color -> Color
 softlight color1 color2 =
@@ -313,7 +507,6 @@ softlight color1 color2 =
 
 
 {-| The same as overlay but with the color roles reversed.
-
 -}
 hardlight : Color -> Color -> Color
 hardlight color1 color2 =
