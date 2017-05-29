@@ -58,6 +58,12 @@ So
         Color.blue
             |> Color.Mixing.mapRedPercent ((+) 0.5)
 
+You can also set the percentage for a channel using `always`
+
+        -- Set red channel to %50
+        Color.blue
+            |> Color.Mixing.mapRedPercent (always 0.5)
+
 @docs mapRedPercent, mapGreenPercent, mapBluePercent, mapAlphaPercent
 
 
