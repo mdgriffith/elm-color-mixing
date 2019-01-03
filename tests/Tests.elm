@@ -13,51 +13,11 @@ startColor =
 
 
 colorEquality c1 c2 =
-    let
-        rgba1 =
-            toRgb c1
-
-        rgba2 =
-            toRgb c2
-
-        alphaTolerance a =
-            round (a * 1000)
-    in
-        rgba1.red
-            == rgba2.red
-            && rgba1.green
-            == rgba2.green
-            && rgba1.blue
-            == rgba2.blue
-            && alphaTolerance rgba1.alpha
-            == alphaTolerance rgba2.alpha
+    Color.toCssString c1 == Color.toCssString c2
 
 
 colorEqualityDebug c1 c2 =
-    let
-        rgba1 =
-            Debug.log "color1" <| toRgb c1
-
-        rgba2 =
-            Debug.log "color2" <| toRgb c2
-
-        hsl1 =
-            Debug.log "color1" <| toHsl c1
-
-        hsl2 =
-            Debug.log "color2" <| toHsl c2
-
-        alphaTolerance a =
-            round (a * 1000)
-    in
-        rgba1.red
-            == rgba2.red
-            && rgba1.green
-            == rgba2.green
-            && rgba1.blue
-            == rgba2.blue
-            && alphaTolerance rgba1.alpha
-            == alphaTolerance rgba2.alpha
+    Debug.log "color1" (Color.toCssString c1) == Debug.log "color2" (Color.toCssString c2)
 
 
 all : Test
@@ -123,13 +83,13 @@ all =
                 Expect.true "" <|
                     colorEquality
                         (tint 0.5 (rgba 0 0 255 0.5))
-                        (rgba 191 191 255 0.75)
+                        (rgba 191.25 191.25 255 0.75)
         , test "Shade" <|
             \() ->
                 Expect.true "" <|
                     colorEquality
                         (shade 0.5 (rgba 0 0 255 0.5))
-                        (rgba 0 0 64 0.75)
+                        (rgba 0 0 63.75 0.75)
         , test "Multiply" <|
             \() ->
                 Expect.true "" <|
@@ -141,7 +101,7 @@ all =
                 Expect.true "" <|
                     colorEquality
                         (softlight (rgb 255 102 0) (rgb 0 0 0))
-                        (rgb 255 41 0)
+                        (rgb 255 40.8 0)
         , test "Overlay" <|
             \() ->
                 Expect.true "" <|
@@ -153,5 +113,5 @@ all =
                 Expect.true "" <|
                     colorEquality
                         (overlay (rgb 255 102 0) (rgb 51 51 51))
-                        (rgb 255 41 0)
+                        (rgb 255 40.8 0)
         ]
