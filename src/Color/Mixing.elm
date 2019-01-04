@@ -1,41 +1,11 @@
-module Color.Mixing
-    exposing
-        ( Factor
-        , lighten
-        , darken
-        , saturate
-        , desaturate
-        , tint
-        , shade
-        , fade
-        , fadeIn
-        , fadeOut
-        , mix
-        , spin
-        , average
-        , difference
-        , multiply
-        , exclusion
-        , negation
-        , overlay
-        , screen
-        , softlight
-        , hardlight
-        , mapRed
-        , mapGreen
-        , mapBlue
-        , mapAlpha
-        , mapRedPercent
-        , mapGreenPercent
-        , mapBluePercent
-        , mapAlphaPercent
-        , mapSaturation
-        , mapHue
-        , mapLightness
-        , mapSaturationPercent
-        , mapHuePercent
-        , mapLightnessPercent
-        )
+module Color.Mixing exposing
+    ( Factor, lighten, darken, saturate, desaturate, fade, fadeIn, fadeOut, mix, spin, tint, shade
+    , average, difference, exclusion, hardlight, multiply, negation, overlay, screen, softlight
+    , mapRed, mapGreen, mapBlue, mapAlpha
+    , mapRedPercent, mapGreenPercent, mapBluePercent, mapAlphaPercent
+    , mapSaturation, mapHue, mapLightness
+    , mapSaturationPercent, mapHuePercent, mapLightnessPercent
+    )
 
 {-| Color Mixing!
 
@@ -50,7 +20,7 @@ Give a function that takes the current channel value and returns a new channel v
 
 @docs mapRed, mapGreen, mapBlue, mapAlpha
 
-The `..Percent` version of the maps will take the current channel value as a *percentage* and return a new percentage that the channel should be.
+The `..Percent` version of the maps will take the current channel value as a _percentage_ and return a new percentage that the channel should be.
 
 So
 
@@ -94,7 +64,7 @@ mapRed fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba (fn red) green blue alpha
+    Color.rgba (fn red) green blue alpha
 
 
 {-| -}
@@ -104,7 +74,7 @@ mapGreen fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red (fn green) blue alpha
+    Color.rgba red (fn green) blue alpha
 
 
 {-| -}
@@ -114,7 +84,7 @@ mapBlue fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red green (fn blue) alpha
+    Color.rgba red green (fn blue) alpha
 
 
 {-| -}
@@ -124,7 +94,7 @@ mapAlpha fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red green blue (fn alpha)
+    Color.rgba red green blue (fn alpha)
 
 
 {-| -}
@@ -134,7 +104,7 @@ mapSaturation fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla hue (fn saturation) lightness alpha
+    Color.hsla hue (fn saturation) lightness alpha
 
 
 {-| -}
@@ -144,7 +114,7 @@ mapHue fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla (fn hue) saturation lightness alpha
+    Color.hsla (fn hue) saturation lightness alpha
 
 
 {-| -}
@@ -154,11 +124,11 @@ mapLightness fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla hue saturation (fn lightness) alpha
+    Color.hsla hue saturation (fn lightness) alpha
 
 
 percent fn channel factor =
-    factor * (fn (channel / factor))
+    factor * fn (channel / factor)
 
 
 {-| -}
@@ -168,7 +138,7 @@ mapRedPercent fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba (percent fn (red) 255) green blue alpha
+    Color.rgba (percent fn red 255) green blue alpha
 
 
 {-| -}
@@ -178,7 +148,7 @@ mapGreenPercent fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red (percent fn (green) 255) blue alpha
+    Color.rgba red (percent fn green 255) blue alpha
 
 
 {-| -}
@@ -188,7 +158,7 @@ mapBluePercent fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red green (percent fn (blue) 255) alpha
+    Color.rgba red green (percent fn blue 255) alpha
 
 
 {-| -}
@@ -198,7 +168,7 @@ mapAlphaPercent fn color =
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-        Color.rgba red green blue (percent fn alpha 1.0)
+    Color.rgba red green blue (percent fn alpha 1.0)
 
 
 {-| -}
@@ -208,7 +178,7 @@ mapSaturationPercent fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla hue (percent fn saturation 1.0) lightness alpha
+    Color.hsla hue (percent fn saturation 1.0) lightness alpha
 
 
 {-| -}
@@ -218,7 +188,7 @@ mapHuePercent fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla (percent fn hue (degrees 360)) saturation lightness alpha
+    Color.hsla (percent fn hue (degrees 360)) saturation lightness alpha
 
 
 {-| -}
@@ -228,7 +198,7 @@ mapLightnessPercent fn color =
         { hue, saturation, lightness, alpha } =
             Color.toHsla color
     in
-        Color.hsla hue saturation (percent fn lightness 1.0) alpha
+    Color.hsla hue saturation (percent fn lightness 1.0) alpha
 
 
 {-| Increase the saturation of a color in the HSL color space by an absolute amount.
@@ -242,7 +212,7 @@ saturate x color =
         sat =
             clamp 0 1 (colorHSL.saturation + x)
     in
-        hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
+    hsla colorHSL.hue sat colorHSL.lightness colorHSL.alpha
 
 
 {-| Decrease the saturation of a color in the HSL color space by an absolute amount.
@@ -256,7 +226,7 @@ desaturate x color =
         sat =
             clamp 0 1 (colorHSL.saturation - x)
     in
-        hsla (colorHSL.hue) (sat) (colorHSL.lightness) (colorHSL.alpha)
+    hsla colorHSL.hue sat colorHSL.lightness colorHSL.alpha
 
 
 {-| Increase the lightness of a color.
@@ -270,7 +240,7 @@ lighten x color =
         lightness =
             clamp 0 1 (colorHSL.lightness + x)
     in
-        hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
+    hsla colorHSL.hue colorHSL.saturation lightness colorHSL.alpha
 
 
 {-| Decrease the lightness of a color.
@@ -284,7 +254,7 @@ darken x color =
         lightness =
             clamp 0 1 (colorHSL.lightness - x)
     in
-        hsla (colorHSL.hue) (colorHSL.saturation) (lightness) (colorHSL.alpha)
+    hsla colorHSL.hue colorHSL.saturation lightness colorHSL.alpha
 
 
 {-| Decrease the transparency of a color, making it more opaque.
@@ -298,7 +268,7 @@ fadeIn x color =
         alpha =
             clamp 0 1 (colorHSL.alpha + x)
     in
-        hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
+    hsla colorHSL.hue colorHSL.saturation colorHSL.lightness alpha
 
 
 {-| Increase the transparency of a color, making it less opaque.
@@ -312,7 +282,7 @@ fadeOut x color =
         alpha =
             clamp 0 1 (colorHSL.alpha - x)
     in
-        hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
+    hsla colorHSL.hue colorHSL.saturation colorHSL.lightness alpha
 
 
 {-| Set the absolute transparency of a color.
@@ -326,7 +296,7 @@ fade x color =
         alpha =
             clamp 0 1 x
     in
-        hsla (colorHSL.hue) (colorHSL.saturation) (colorHSL.lightness) (alpha)
+    hsla colorHSL.hue colorHSL.saturation colorHSL.lightness alpha
 
 
 {-| Rotate the hue angle of a color in either direction.
@@ -343,17 +313,18 @@ spin x color =
         protoHue =
             toFloat
                 (round ((colorHSL.hue + x) * precision)
-                    |> modBy (round ((degrees 360.0) * precision))
+                    |> modBy (round (degrees 360.0 * precision))
                 )
                 / precision
 
         hue =
             if protoHue < 0 then
-                protoHue + (degrees 360.0)
+                protoHue + degrees 360.0
+
             else
                 protoHue
     in
-        hsla hue (colorHSL.saturation) (colorHSL.lightness) (colorHSL.alpha)
+    hsla hue colorHSL.saturation colorHSL.lightness colorHSL.alpha
 
 
 {-| Mix two colors together in variable proportion. Opacity is included in the calculations.
@@ -376,6 +347,7 @@ mix p color1 color2 =
         w1 =
             if w * a == -1 then
                 w
+
             else
                 (((w + a) / (1 + w * a)) + 1) / 2.0
 
@@ -394,7 +366,7 @@ mix p color1 color2 =
         alpha =
             rgba1.alpha * p + rgba2.alpha * (1 - p)
     in
-        rgba (r) (g) (b) alpha
+    rgba r g b alpha
 
 
 {-| Mix color with white in variable proportion. Same as calling `mix` with white.
@@ -446,16 +418,17 @@ blend fn color1 color2 =
                               )
                         )
                             / newAlpha
+
                     else
                         c_
             in
-                newChannel * 255
+            newChannel * 255
     in
-        rgba
-            (apply rgba1.red rgba2.red)
-            (apply rgba1.green rgba2.green)
-            (apply rgba1.blue rgba2.blue)
-            newAlpha
+    rgba
+        (apply rgba1.red rgba2.red)
+        (apply rgba1.green rgba2.green)
+        (apply rgba1.blue rgba2.blue)
+        newAlpha
 
 
 {-| Multiply two colors. Corresponding RGB channels from each of the two colors are multiplied together then divided by 255. The result is a darker color.
@@ -485,14 +458,15 @@ overlay color1 color2 =
                 newc1 =
                     c1 * 2
             in
-                if newc1 <= 1 then
-                    newc1 * c2
-                else
-                    let
-                        c1_ =
-                            newc1 - 1
-                    in
-                        c1_ + c2 - c1_ * c2
+            if newc1 <= 1 then
+                newc1 * c2
+
+            else
+                let
+                    c1_ =
+                        newc1 - 1
+                in
+                c1_ + c2 - c1_ * c2
         )
         color1
         color2
@@ -506,19 +480,21 @@ softlight color1 color2 =
         (\c1 c2 ->
             let
                 ( e, d ) =
-                    if (c2 > 0.5) then
+                    if c2 > 0.5 then
                         let
                             d_ =
                                 if c1 > 0.25 then
                                     sqrt c1
+
                                 else
                                     ((16 * c1 - 12) * c1 + 4) * c1
                         in
-                            ( d_, 1 )
+                        ( d_, 1 )
+
                     else
                         ( c1, 1 )
             in
-                c1 - (1 - 2 * c2) * e * (d - c1)
+            c1 - (1 - 2 * c2) * e * (d - c1)
         )
         color1
         color2

@@ -1,11 +1,11 @@
-module Tests exposing (..)
+module Tests exposing (all, colorEquality, colorEqualityDebug, startColor)
 
+import Color exposing (..)
+import Color.Mixing exposing (..)
+import Debug
+import Expect
 import String
 import Test exposing (..)
-import Debug
-import Color.Mixing exposing (..)
-import Color exposing (..)
-import Expect
 
 
 startColor =
